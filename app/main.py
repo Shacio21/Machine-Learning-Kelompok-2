@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
-from app.api import routes_calculate_maxhr, routes_health, routes_predict
+from app.api import routes_calculate_maxhr, routes_health, routes_predict,routes_calculate_bmi
 
 app = FastAPI(
     title="Fitness Level API",
@@ -12,3 +12,4 @@ app = FastAPI(
 app.include_router(routes_health.router)
 app.include_router(routes_predict.router)
 app.include_router(routes_calculate_maxhr.router)
+app.include_router(routes_calculate_bmi.router)
