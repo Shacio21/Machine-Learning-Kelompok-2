@@ -1,9 +1,10 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from app.core.security import verify_api_key
 from app.schemas.predict_schema import PredictRequest, PredictResponse
 
 router = APIRouter()
 
-@router.post("/predict", response_model=PredictResponse)
+@router.post("/predict", response_model=PredictResponse, dependencies=[Depends(verify_api_key)])
 def predict(data: PredictRequest):
     """
     Dummy prediction (pakai BMI sebagai contoh).
