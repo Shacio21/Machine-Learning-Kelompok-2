@@ -15,13 +15,19 @@ Terdapat 3 branch pada repository ini:
 
 ##  Backend (FastAPI)
 
-### 1. Persiapan
-Pastikan sudah menginstall:
-- [Python 3.10+](https://www.python.org/downloads/)
-- [pip](https://pip.pypa.io/en/stable/)
-- Virtual environment (opsional, direkomendasikan)
+### 1. Instalasi Dokcer Desktop
+Pastikan device anda sudah menginstall Docker Desktop, 
+jika belum silahkan install di :
+https://www.docker.com/products/docker-desktop/
 
 ### 2. Instalasi Dependensi
+Pastikan anda sudah pull / download repository berikut,
+Masuk ke folder dimana repositori berada lalu buka dengan terminal
 Masuk ke folder `backend`:
-```bash
-cd backend
+` ``bash
+cd backend`` `
+### 3. Build and Run Container Docker
+Lakukan perintah berikut :
+` ``bash
+docker build -t fitness-lv .`` 
+docker run -d -p 8000:8000 fitness-lv` 
