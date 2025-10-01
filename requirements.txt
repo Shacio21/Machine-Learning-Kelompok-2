@@ -9,3 +9,7 @@ starlette==0.38.2
 typing-extensions==4.12.2
 uvicorn==0.30.6
 pydantic_settings
+numpy
+scikit-learn==1.7.0
+joblib
+pandas

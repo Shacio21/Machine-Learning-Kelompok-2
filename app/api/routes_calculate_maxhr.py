@@ -2,9 +2,12 @@ from fastapi import APIRouter, Depends
 from app.schemas.calculate_maxhr_schemas import CalculateMAXHRRequest, CalculateMAXHRResponse
 from app.core.security import verify_api_key
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/calculate",   # optional prefix
+    tags=["MAXHR"]
+)
 
-@router.post("/calculate_maxhr", response_model=CalculateMAXHRResponse, dependencies=[Depends(verify_api_key)])
+@router.post("/maxhr", response_model=CalculateMAXHRResponse, dependencies=[Depends(verify_api_key)])
 def calculate_maxhr(data: CalculateMAXHRRequest):
     """
     Hitung Maximum Heart Rate (MAXHR) berdasarkan umur.
