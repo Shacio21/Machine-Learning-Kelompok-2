@@ -2,10 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.core.security import verify_api_key
 from app.schemas.predict_schema import PredictRequest, PredictResponse
 from app.utils.logger import logger
-from pydantic import BaseModel
+from app.schemas.predict_schema import PredictRequest,PredictResponse
 import numpy as np
 import joblib
 import os
+import pandas as pd
 
 # Router
 # router = APIRouter()
@@ -63,10 +64,6 @@ with open(MODEL_PATH, "rb") as f:
 # Inisialisasi FastAPI
 router = APIRouter()
 
-# Skema request
-class PredictRequest(BaseModel):
-    features: list[float]
-
 # Endpoint root
 @router.get("/")
 def home():
@@ -74,10 +71,7 @@ def home():
 
 # Endpoint prediksi
 @router.post("/predict")
-def predict(request: PredictRequest):
-    try:
-        data = np.array(request.features).reshape(1, -1)
-        prediction = model.predict(data)
-        return {"prediction": prediction.tolist()}
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+def predict(data: PredictRequest):
+    df = pd.DataFrame([data.dict()])
+    prediction = model.predict(df)[0]
+    return PredictResponse(prediction) 
