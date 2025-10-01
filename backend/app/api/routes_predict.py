@@ -73,5 +73,5 @@ def home():
 @router.post("/predict")
 def predict(data: PredictRequest):
     df = pd.DataFrame([data.dict()])
-    prediction = model.predict(df)[0]
-    return PredictResponse(prediction) 
+    prediction1 = model.predict(df)[0]
+    return PredictResponse(prediction=prediction1) 
