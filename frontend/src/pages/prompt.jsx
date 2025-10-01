@@ -30,6 +30,26 @@ export default function Prompt() {
         smoking_status: "",
     });
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const res = await fetch("http://localhost:5000/api/submit", {
+            method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await res.json();
+            setResponse(result.message);
+        } catch (err) {
+            console.error("Error:", err);
+            setResponse("Something went wrong!");
+        }
+    };
+
     const incrementCard = () => {
         setLastCard(maxCard);
 
@@ -243,13 +263,13 @@ export default function Prompt() {
 
     return (
         <MainLayout>
-            <div className="mt-10 w-full pb-20 font-normal flex flex-col gap-20 items-center justify-center">
+            <form className="mt-10 w-full pb-20 font-normal flex flex-col gap-20 items-center justify-center" onSubmit={handleSubmit}>
                 {firstCard()}
                 {secondCard()}
                 {thirdCard()}
                 {fourthCard()}
                 {fifthCard()}
-            </div>
+            </form>
             <div ref={endElement} className=" p-5 absolute bottom-0"></div>
         </MainLayout>
     )
