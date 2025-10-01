@@ -2,10 +2,6 @@
 
 @import "tailwindcss";
 
-:root {
-    @apply bg-[url(/background.webp)] bg-no-repeat bg-cover;
-}
-
 .font-bold {
     font-family: "Montserrat", sans-serif;
     font-optical-sizing: auto;
@@ -16,6 +12,12 @@
     font-style: italic;
 }
 
+.font-normal {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+}
+
 .font-light {
     font-family: "Montserrat", sans-serif;
     font-optical-sizing: auto;
@@ -24,4 +26,18 @@
 
 .btn-base {
     @apply p-2 rounded-lg px-4 py-2 duration-200 ease-in-out shadow-xl;
+}
+
+.button-arrow {
+    @apply absolute left-1/2 bottom-6 hover:text-gray-300 duration-200 ease-in-out disabled:text-gray-200;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
 }

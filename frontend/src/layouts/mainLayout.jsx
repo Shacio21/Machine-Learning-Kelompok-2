@@ -3,11 +3,15 @@ import { Link } from "react-router-dom";
 export default function MainLayout({ children }) {
         return(
             <>
-                <div className="w-full h-full bg-black bg-white-500 absolute opacity-60 z-[0]" />
-                <div className="font-bold z-[1] bg-gradient-to-b from-black/90 to-white/0">
-                    <div className="sticky w-full py-4 px-2 flex font-add-italic justify-between">
+                <div className="bg-[url(/background.webp)] bg-no-repeat bg-cover w-full h-full  z-[-1] top-0 left-0 fixed" />
+                <div className="font-bold relative z-[1] bg-transparent">
+                    <div className="sticky w-full py-4 px-2 flex font-add-italic justify-between bg-gradient-to-b from-black/90 to-white/0">
                         <div className="flex gap-2">
-                            <img src="/icon.webp" className="w-16" />
+
+                            <Link to="/">
+                                <img src="/icon.webp" className="w-16" />
+                            </Link>
+
                             <div className="flex flex-col">
                                 <p className="text-xl/tight text-green-400">Healthy</p>
                                 <p className="text-xl/tight text-white">Level Fitness</p>
@@ -25,7 +29,7 @@ export default function MainLayout({ children }) {
                             </div>
                         </div>
                     </div>
-                    <div className="absolute w-full">
+                    <div className="w-full">
                         {children}
                     </div>
                 </div>

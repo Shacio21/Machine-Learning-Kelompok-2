@@ -1,16 +1,15 @@
-export default function CheckboxInput({ label, value, onChange }) {
+import { forwardRef, useRef } from "react";
 
-    const onHandleChange = (val) => {
-        onChange(val);
-    }
+export default forwardRef(function CheckboxInput({ label, ...props }, ref) {
+    const input = ref ? ref : useRef();
 
     return (
         <div className="flex gap-2 items-center">
             <p className="text-xl">{label}</p>
             <input type="checkbox" 
-                value={value}
-                onChange={(e) => onHandleChange(e.target.value)}
+                {...props}
+                ref={input}
             />
         </div>
     )
-}
+})
