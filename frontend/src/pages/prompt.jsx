@@ -13,24 +13,24 @@ export default function Prompt() {
 
     /* NOTE: input data */
     const [data, setData] = useState({ 
-        age: 50,
-        height_cm: 100,
-        weight_kg: 20,
-        duration_minutes: 60,
-        calories_burned: 200,
-        avg_heart_rate: 100,
-        hours_sleep: 8,
-        stress_level: 5,
-        daily_steps: 100,
-        hydration_level: 100,
-        resting_heart_rate: 100,
-        blood_pressure_systolic: 120,
-        blood_pressure_diastolic: 90,
+        age: 0,
+        height_cm: 0,
+        weight_kg: 0,
+        duration_minutes: 0,
+        calories_burned: 0,
+        avg_heart_rate: 0,
+        hours_sleep: 0,
+        stress_level: 0,
+        daily_steps: 0,
+        hydration_level: 0,
+        resting_heart_rate: 0,
+        blood_pressure_systolic: 0,
+        blood_pressure_diastolic: 0,
         bmi:0,
-        gender: "Male",
-        activity_type: "Running",
-        intensity: "Medium",
-        smoking_status: "No",
+        gender: "",
+        activity_type: "",
+        intensity: "",
+        smoking_status: "",
     });
 
     const handleSubmit = async (e) => {
@@ -81,13 +81,13 @@ export default function Prompt() {
         const nextCard = maxCard+1;
         setMaxCard(nextCard);
         
-        console.log(lastCard +">"+ maxCard);
+        //console.log(lastCard +">"+ maxCard);
     }
 
     useEffect(() => {
         if (maxCard > lastCard)
         {
-            console.log(data);
+            //console.log(data);
             scrollIntoView(endElement.current, {
                 behavior: 'smooth',
                 block: 'center',
@@ -112,19 +112,23 @@ export default function Prompt() {
                             label="Age"
                             value={data.age}
                             onChange={(e)=> { setData(prev => ({ ...prev, age:e.target.value })) }}
+                            min={10}
+                            max={100}
                         />
                         <NumberInput 
                             label="Height (cm)"
                             value={data.height_cm}
                             onChange={(e)=> { setData(prev => ({ ...prev, height_cm:e.target.value })) }}
+                            min={0}
                         />
                         <NumberInput 
                             label="Weight (Kg)"
                             value={data.weight_kg}
                             onChange={(e)=> { setData(prev => ({ ...prev, weight_kg:e.target.value })) }}
+                            min={0}
                         />
                         {maxCard === 1 && (
-                            <button className="button-arrow" onClick={()=> { incrementCard(); handleBMICalculation(); }} disabled={!canContinueOnFirstCard()}>
+                            <button className="button-arrow" onClick={()=> { incrementCard(); handleBMICalculation(); }} disabled={!canContinueOnFirstCard}>
                                 <i className="text-3xl bi bi-arrow-down-circle-fill"></i>
                             </button>
                         )}
@@ -143,16 +147,19 @@ export default function Prompt() {
                             label="Daily Exercise Duration (Minutes)"
                             value={data.duration_minutes}
                             onChange={(e)=> { setData(prev => ({ ...prev, duration_minutes:e.target.value })) }}
+                            min={0}
                         />
                         <NumberInput 
-                            label="Calories (kkal)"
+                            label="Calories Burned in a day (kkal)"
                             value={data.calories_burned}
                             onChange={(e)=> { setData(prev => ({ ...prev, calories_burned:e.target.value })) }}
+                            min={0}
                         />
                         <NumberInput 
                             label="Daily Steps"
                             value={data.daily_steps}
                             onChange={(e)=> { setData(prev => ({ ...prev, daily_steps:e.target.value })) }}
+                            min={0}
                         />
                         {maxCard === 2 && (
                             <button className="button-arrow" onClick={incrementCard} disabled={!canContinueOnSecondCard()}>
@@ -175,21 +182,29 @@ export default function Prompt() {
                             label="Average Heart Rate (bpm)"
                             value={data.avg_heart_rate}
                             onChange={(e)=> { setData(prev => ({ ...prev, avg_heart_rate:e.target.value })) }}
+                            min={30}
+                            max={220}
                         />
                         <NumberInput 
                             label="Average Resting Heart Rate (bpm)"
                             value={data.resting_heart_rate}
                             onChange={(e)=> { setData(prev => ({ ...prev, resting_heart_rate:e.target.value })) }}
+                            min={30}
+                            max={200}
                         />
                         <NumberInput 
                             label="Blood Pressure Systolic"
                             value={data.blood_pressure_systolic}
                             onChange={(e)=> { setData(prev => ({ ...prev, blood_pressure_systolic:e.target.value })) }}
+                            min={80}
+                            max={200}
                         />
                         <NumberInput 
                             label="Blood Pressure Diastoslic"
                             value={data.blood_pressure_diastolic}
                             onChange={(e)=> { setData(prev => ({ ...prev, blood_pressure_diastolic:e.target.value })) }}
+                            min={50}
+                            max={130}
                         />
                         {maxCard === 3 && (
                             <button className="button-arrow" onClick={incrementCard} id="card-3" disabled={!canContinueOnThirdCard()}>
@@ -211,16 +226,21 @@ export default function Prompt() {
                             label="Hours Slept"
                             value={data.hours_sleep}
                             onChange={(e)=> { setData(prev => ({ ...prev, hours_sleep:e.target.value })) }}
+                            min={0}
+                            max={24}
                         />
                         <NumberInput 
                             label="Stress Level"
                             value={data.stress_level}
                             onChange={(e)=> { setData(prev => ({ ...prev, stress_level:e.target.value })) }}
+                            min={1}
+                            max={10}
                         />
                         <NumberInput 
                             label="Hydration Level"
                             value={data.hydration_level}
                             onChange={(e)=> { setData(prev => ({ ...prev, hydration_level:e.target.value })) }}
+                            min={0}
                         />
                         {maxCard === 4 && (
                             <button className="button-arrow" onClick={incrementCard} disabled={!canContinueOnFourthCard()}>
@@ -279,7 +299,9 @@ export default function Prompt() {
                             value={data.smoking_status}
                             onChange={(e)=> { setData(prev => ({ ...prev, smoking_status:e.target.value })) }}
                         />
-
+                        <button type="submit" className="btn-base bg-black hover:bg-green-400 absolute bottom-6 left-8 text-white disabled:bg-gray-200 z-10 -mt-20" disabled={!canContinueOnFifthCard()}>
+                            Submit
+                        </button>
                     </div>
                 )}
             </section>
@@ -289,9 +311,6 @@ export default function Prompt() {
     return (
         <MainLayout>
             <form className="mt-10 w-full pb-20 font-normal flex flex-col gap-20 items-center justify-center" onSubmit={handleSubmit}>
-                <button type="submit" className="btn-base bg-black hover:bg-green-400 absolute bottom-6 left-8 text-white disabled:bg-gray-200 z-10 -mt-20" disabled={!canContinueOnFifthCard()}>
-                    Submit
-                </button>
                 {firstCard()}
                 {secondCard()}
                 {thirdCard()}
