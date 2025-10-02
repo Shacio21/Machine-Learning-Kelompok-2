@@ -16,7 +16,7 @@ class PredictRequest(BaseModel):
     blood_pressure_systolic: float = Field(..., ge=80, le=200, description="Tekanan darah sistolik")
     blood_pressure_diastolic: float = Field(..., ge=50, le=130, description="Tekanan darah diastolik")
     gender: str = Field(..., description="Jenis kelamin (Male/Female)")
-    activity_type: str = Field(..., description="Jenis aktivitas (Jogging, Swimming, Cycling, dll)")
+    activity_type: str = Field(..., description="Jenis aktivitas (Cycling, HIIT, Walking, Dancing, Weight_Training, Yoga, Tennis, Basketball, Swimming, Running)")
     intensity: str = Field(..., description="Intensitas (Low/Medium/High)")
     smoking_status: str = Field(..., description="Status merokok (Yes/No/Former)")
 

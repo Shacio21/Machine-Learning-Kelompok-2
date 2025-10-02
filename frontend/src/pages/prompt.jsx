@@ -3,52 +3,77 @@ import NumberInput from "../components/NumberInput";
 import DropdownInput from "../components/DropdownInput";
 import MainLayout from "../layouts/mainLayout";
 import scrollIntoView from "scroll-into-view-if-needed";
+import { useNavigate } from "react-router-dom";
 
 export default function Prompt() {
     const [maxCard, setMaxCard] = useState(1);
     const [lastCard, setLastCard] = useState(1);
     const endElement = useRef(null);
+    const navigate = useNavigate();
 
     /* NOTE: input data */
     const [data, setData] = useState({ 
-        age: 0,
-        height: 0,
-        weight: 0,
-        duration_minutes: 0,
-        calories_burned: 0,
-        avg_heart_rate: 0,
-        hours_sleep: 0,
-        stress_level: 0,
-        daily_steps: 0,
-        hydration_level: 0,
-        resting_heart_rate: 0,
-        blood_pressure_systolic: 0,
-        blood_pressure_diastolic: 0,
-        gender: 0,
-        activity_type: "",
-        intensity: "",
-        smoking_status: "",
+        age: 50,
+        height_cm: 100,
+        weight_kg: 20,
+        duration_minutes: 60,
+        calories_burned: 200,
+        avg_heart_rate: 100,
+        hours_sleep: 8,
+        stress_level: 5,
+        daily_steps: 100,
+        hydration_level: 100,
+        resting_heart_rate: 100,
+        blood_pressure_systolic: 120,
+        blood_pressure_diastolic: 90,
+        bmi:0,
+        gender: "Male",
+        activity_type: "Running",
+        intensity: "Medium",
+        smoking_status: "No",
     });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const res = await fetch("http://localhost:5000/api/submit", {
+            const res = await fetch("http://localhost:8000/predict", {
             method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "x-api-key": "kelompok2nihbukan1"
                 },
                 body: JSON.stringify(data),
             });
 
             const result = await res.json();
-            setResponse(result.message);
+            navigate("/result", { state: { prediction: result.prediction } });
         } catch (err) {
             console.error("Error:", err);
             setResponse("Something went wrong!");
         }
     };
+
+    const handleBMICalculation = async () => {
+        const bmiInputData = { weight: data.weight_kg, height: data.height_cm };
+
+        try {
+            const res = await fetch("http://localhost:8000/calculate/bmi", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-api-key": "kelompok2nihbukan1"
+                },
+                body: JSON.stringify(bmiInputData),
+            });
+
+            const result = await res.json();
+            setData(prev=> ({ ...prev, bmi:result.bmi}));
+        } catch (err) {
+            console.error("Error:", err);
+            setResponse("Something went wrong!");
+        }
+    }
 
     const incrementCard = () => {
         setLastCard(maxCard);
@@ -62,6 +87,7 @@ export default function Prompt() {
     useEffect(() => {
         if (maxCard > lastCard)
         {
+            console.log(data);
             scrollIntoView(endElement.current, {
                 behavior: 'smooth',
                 block: 'center',
@@ -71,7 +97,7 @@ export default function Prompt() {
         }
     }, [maxCard]);
 
-    const canContinueOnFirstCard = () => { return data.age != 0 && data.height != 0 && data.weight != 0; }
+    const canContinueOnFirstCard = () => { return data.age != 0 && data.height_cm != 0 && data.weight_kg != 0; }
     const canContinueOnSecondCard = () => { return data.duration_minutes != 0 && data.calories_burned != 0 && data.daily_steps != 0; }
     const canContinueOnThirdCard = () => { return data.avg_heart_rate != 0 && data.resting_heart_rate != 0 && data.blood_pressure_diastolic != 0 && data.blood_pressure_systolic; }
     const canContinueOnFourthCard = () => { return data.hours_sleep != 0 && data.stress_level != 0 && data.hydration_level != 0; }
@@ -89,16 +115,16 @@ export default function Prompt() {
                         />
                         <NumberInput 
                             label="Height (cm)"
-                            value={data.height}
-                            onChange={(e)=> { setData(prev => ({ ...prev, height:e.target.value })) }}
+                            value={data.height_cm}
+                            onChange={(e)=> { setData(prev => ({ ...prev, height_cm:e.target.value })) }}
                         />
                         <NumberInput 
                             label="Weight (Kg)"
-                            value={data.weight}
-                            onChange={(e)=> { setData(prev => ({ ...prev, weight:e.target.value })) }}
+                            value={data.weight_kg}
+                            onChange={(e)=> { setData(prev => ({ ...prev, weight_kg:e.target.value })) }}
                         />
                         {maxCard === 1 && (
-                            <button className="button-arrow" onClick={incrementCard} disabled={!canContinueOnFirstCard()}>
+                            <button className="button-arrow" onClick={()=> { incrementCard(); handleBMICalculation(); }} disabled={!canContinueOnFirstCard()}>
                                 <i className="text-3xl bi bi-arrow-down-circle-fill"></i>
                             </button>
                         )}
@@ -207,12 +233,13 @@ export default function Prompt() {
         )
     }
 
-    const gender = [ { tag: "Male", value:1 }, { tag:"Female", value:0 } ]
-    const intensity = [ { tag: "High", value: "High" }, { tag:"Medium", value:"Medium" }, { tag:"Low", value:"Low" } ]
-    const smoking_status = [ { tag: "Never", value:"Never" }, { tag:"Currently Yes", value:"Current" }, { tag:"Former Smoker", value:"Former Smoker" } ]
+    const gender = [ {tag:"Please fill in", value:""}, { tag: "Male", value:"Male" }, { tag:"Female", value:"Female" } ]
+    const intensity = [ { tag: "None", value: "" },{ tag: "High", value: "High" }, { tag:"Medium", value:"Medium" }, { tag:"Low", value:"Low" } ]
+    const smoking_status = [ { tag:"None", value:""}, { tag: "Never", value:"No" }, { tag:"Currently Yes", value:"Yes" }, { tag:"Former Smoker", value:"Former" } ]
     const activity_type = [ 
+        { tag: "None", value: "" },
         { tag: "Yoga", value: "Yoga" },
-        { tag: "Weight Training", value:"Weight_Training"},
+        { tag: "Weight_Training", value:"Weight_Training"},
         { tag: "High Intensive Interval Training", value:"HIIT"},
         { tag: "Dancing", value:"Dancing"},
         { tag: "Cycling", value:"Cycling"},
@@ -252,9 +279,7 @@ export default function Prompt() {
                             value={data.smoking_status}
                             onChange={(e)=> { setData(prev => ({ ...prev, smoking_status:e.target.value })) }}
                         />
-                        <button type="submit" className="btn-base bg-black hover:bg-green-400 absolute bottom-6 left-8 text-white disabled:bg-gray-200" disabled={canContinueOnFifthCard()}>
-                            Submit
-                        </button>
+
                     </div>
                 )}
             </section>
@@ -264,6 +289,9 @@ export default function Prompt() {
     return (
         <MainLayout>
             <form className="mt-10 w-full pb-20 font-normal flex flex-col gap-20 items-center justify-center" onSubmit={handleSubmit}>
+                <button type="submit" className="btn-base bg-black hover:bg-green-400 absolute bottom-6 left-8 text-white disabled:bg-gray-200 z-10 -mt-20" disabled={!canContinueOnFifthCard()}>
+                    Submit
+                </button>
                 {firstCard()}
                 {secondCard()}
                 {thirdCard()}

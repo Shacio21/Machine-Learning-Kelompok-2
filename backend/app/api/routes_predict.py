@@ -70,7 +70,7 @@ def home():
     return {"message": "API Model is running"}
 
 # Endpoint prediksi
-@router.post("/predict")
+@router.post("/predict", response_model=PredictResponse, dependencies=[Depends(verify_api_key)])
 def predict(data: PredictRequest):
     df = pd.DataFrame([data.dict()])
     prediction1 = model.predict(df)[0]
